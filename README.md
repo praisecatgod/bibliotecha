@@ -1,8 +1,9 @@
 # USER ACCOUNTS
-## ADMIN: admin@example.com
-## USER: user@example.com
-## PASSWORD: test
+
+* ADMIN: admin@example.com
+* USER: user@example.com
+* PASSWORD: test
 
 
-# Yves TODO
+## Yves TODO
 0. cry
