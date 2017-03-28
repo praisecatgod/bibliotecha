@@ -1,0 +1,79 @@
+.container#pale-background
+  .row
+    .col-md-12
+      %h1 Edit Genres <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addGenreModal">+ Genre</button>
+  .row
+    .row
+    .col-md-12
+      %table#genreTable
+        %thead
+          %tr
+            %th Genre
+            %th Number of Books
+            %th
+        %tbody
+          - @genres.each do |g|
+            %tr{:id => g.id}
+              %td= g.genre_name
+              %td= g.book_genres.count
+              %td
+                .btn-group
+                  %button.btn.btn-warning{:type => "button", "data-toggle" => "modal", "data-target" => "#editGenreModal", :onclick => "editGenreModal("+g.id.to_s+",'"+g.genre_name.to_s+"')"} Edit
+                  %button.btn.btn-danger{:type => "button", "data-toggle" => "modal", "data-target" => "#deleteGenreModal", :onclick => "deleteGenreModal("+g.id.to_s+")"} Delete
+
+
+
+  #addGenreModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Add A Genre
+        .modal-body
+          .row
+            .col-md-12
+              %form.form-inline{:action => "/admin/genres", :method => "post"}
+                .form-group
+                  .input-group
+                    %input.form-control{:type => 'text', :placeholder => 'Genre Name', :name=>'genre_name'}
+                  %button.btn.btn-primary{:type => "submit"} Add Genre
+
+  #editGenreModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Edit A User
+        .modal-body
+          .row
+            .col-md-12
+              %form.form-inline{:action => "/admin/genres", :method => "post"}
+                .form-group
+                  .input-group
+                    %input{:type => "hidden", :name => "_method", :value => "put"}
+                    %input#editGenreID{:type => "hidden", :name => "genre_id", :value => "-1"}
+                    %input.form-control#editGenreName{:type => 'text', :placeholder => 'Genre Name', :name=>'genre_name'}
+                  %button.btn.btn-primary{:type => "submit"} Edit Genre
+
+  #deleteGenreModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Delete A Genre
+        .modal-body
+          .row
+            .col-md-12
+              %h2 This is VERY permenent and CAN NOT be reversed.
+              %h2 Are you sure you want to perform this action?
+              %form.form-inline{:action => "/admin/genres", :method => "post"}
+                .form-group
+                  .input-group
+                    %input{:type => "hidden", :name => "_method", :value => "delete"}
+                    %input#deleteGenreID{:type => "hidden", :name => "genre_id", :value => "-1"}
+                  %button.btn.btn-danger{:type => "submit"} DELETE GENRE FOREVER
+
+%script(src="/js/genre.js")

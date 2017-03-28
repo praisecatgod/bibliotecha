@@ -1,0 +1,137 @@
+.container#pale-background
+  .row
+    .col-md-12
+      %h1 Edit Books  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addBookModal">+ Book</button>
+  .row
+    .col-md-12
+      %table#bookTable
+        %thead
+          %tr
+            %th ISBN
+            %th Title
+            %th # Authors
+            %th # Genres
+            %th Current Rentals
+            %th Total Rentals
+            %th Date Added
+            %th
+        %tbody
+          - @books.each do |b|
+            %tr{:id => b.id}
+              %td= b.isbn
+              %td= b.title
+              %td= b.book_authors.count
+              %td= b.book_genres.count
+              %td= b.rentals.where(:is_active => true).count
+              %td= b.rentals.count
+              %td= b.created_at
+              %td
+                .btn-group
+                  %button.btn.btn-primary{:type => "button", "data-toggle" => "modal", "data-target" => "#statsBookModal", :id => b.id, :onclick => "statsBookModal("+b.id.to_s+")"} Stats
+                  %button.btn.btn-warning{:type => "button", "data-toggle" => "modal", "data-target" => "#editBookModal", :id => b.id, :onclick => "editBooksModal("+b.id.to_s+")"} Edit
+                  %button.btn.btn-danger{:type => "button", "data-toggle" => "modal", "data-target" => "#deleteBookModal", :id => b.id, :onclick => "deleteBookModal("+b.id.to_s+")"} Delete
+
+
+
+  #addBookModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Add A Book
+        .modal-body
+          .row
+            .col-md-12
+              %form.form-inline{:action => "/admin/books", :method => "post"}
+                .form-group
+                  .input-group
+                    %input.form-control#addBookISBN{:type => 'text', :placeholder => 'ISBN', :name => 'isbn'}
+                    %input.form-control#addBookTitle{:type => 'text', :placeholder => 'Title', :name => 'title'}
+                    %select.form-control#addBookAuthor{:multiple => true, :name=> 'authors[]'}
+                      %option
+                      - @authors.each do |a|
+                        %option{:value => a.id}= a.author_name
+                    %select.form-control#addBookGenre{:multiple => true, :name=> 'genres[]'}
+                      %option
+                      - @genres.each do |g|
+                        %option{:value => g.id}= g.genre_name
+                    %textarea.form-control#addBookSummary{:rows => '4', :placeholder => 'Summary', :name=>'summary'}
+                  .modal-footer
+                    %button.btn.btn-default#addButton Add Book
+
+
+  #editBookModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Edit A Book
+        .modal-body
+          .row
+            .col-md-12
+              %form.form-inline{:action => "/admin/books", :method => "post"}
+                .form-group
+                  .input-group
+                    %input{:type => "hidden", :name => "_method", :value => "put"}
+                    %input#editBookID{:type => "hidden", :name => "book_id", :value => "-1"}
+                    %input.form-control#editBookISBN{:type => 'text', :placeholder => 'ISBN', :name => 'isbn'}
+                    %input.form-control#editBookTitle{:type => 'text', :placeholder => 'Title', :name => 'title'}
+                    %select.form-control#editBookAuthor{:multiple => true, :name=> 'authors[]'}
+                      %option
+                      - @authors.each do |a|
+                        %option{:value => a.id}= a.author_name
+                    %select.form-control#editBookGenre{:multiple => true, :name=> 'genres[]'}
+                      %option
+                      - @genres.each do |g|
+                        %option{:value => g.id}= g.genre_name
+                    %textarea.form-control#editBookSummary{:rows => '4', :placeholder => 'Summary', :name=>'summary'}
+                  .modal-footer
+                    %button.btn.btn-default#editButton Edit
+
+  #deleteBookModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Delete A Book
+          .modal-body
+            .form-group
+              .row
+                .col-md-12
+                  %h2 This is VERY permenent and CAN NOT be reversed.
+                  %h2 Are you sure you want to perform this action?
+                  %form.form-inline{:action => "/admin/books", :method => "post"}
+                    .form-group
+                      .input-group
+                        %input{:type => "hidden", :name => "_method", :value => "delete"}
+                        %input#deleteBookID{:type => "hidden", :name => "book_id", :value => "-1"}
+                      %button.btn.btn-danger#deleteButton DELETE THIS BOOK
+
+  #statsBookModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Book Stats
+        .modal-body
+          .row
+            .col-md-6
+              %h5 Authors
+              %ul#authorList
+            .col-md-6
+              %h5 Genres
+              %ul#genreList
+          .row
+            .col-md-6
+              %h5 Currently Renting
+              %ul#activeList
+            .col-md-6
+              %h5 Rental History
+              %ul#historyList
+
+
+%script(src="/js/books.js")

@@ -1,0 +1,67 @@
+.container#pale-background
+  .row
+    %table#bookTable
+      %thead
+        %tr
+          %th
+          %th ISBN
+          %th Title
+          %th Authors
+          %th Genres
+          %th Available
+          %th Added
+      %tbody
+        - @books.each do |b|
+          %tr.book{:id => b.id}
+            %td 
+              %img.book-cover{:src=>"/covers/"+b.isbn.to_s+"image.jpg"}
+            %td= b.isbn
+            %td= b.title
+            %td
+              %ul
+              - b.book_authors.each do |a|
+                - if a.author
+                  %li= a.author.author_name
+            %td
+              %ul
+              - b.book_genres.each do |g|
+                - if g.genre
+                  %li= g.genre.genre_name
+            %td
+              = b.rentals.where(is_active: true).count > 0 ? "no" : "yes"
+            %td= b.created_at.strftime("%d/%m/%Y")
+#bookModal.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{:type => "button", "data-dismiss" => "modal"}
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+      .modal-body
+        .row
+          .col-md-6
+            .row
+              .col-md-12
+                .div#bookCover
+          .col-md-6
+            .row
+              .col-md-12
+                %h2#bookTitle
+            .row
+              .col-md-12
+                %h3#bookAuthors
+            .row
+              .col-md-12
+                %p#bookSummary
+
+      .modal-footer
+        - if @user
+          %form.form-inline{:action => "/rent", :method => "post"}
+            .form-group
+              .input-group
+                %input#rentBookID{:type => "hidden", :name => "book_id", :value => "-1"}
+              %button.btn.btn-primary#rentButton{:type => "submit"} Rent
+              %h4#rentWarning This Book Is Currently Being Rented!
+
+
+
+%script(src="/js/browse.js")

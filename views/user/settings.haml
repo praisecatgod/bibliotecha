@@ -1,0 +1,22 @@
+.container#pale-background
+  .row
+    %h1 User Settings
+  .row
+    .panel.panel-default
+      .panel-heading
+        %h2 Change Email and/or Password
+      .panel-body
+        .row
+          %form{:role => "form", :action => "/settings", :method => "post"}
+            %input{:type => "hidden", :name => "_method", :value => "put"}
+            .form-group
+              %label{:for => "userEmail"}Change Email address
+              %input.form-control#userEmail{:type => "email",  :name => 'email', :value => @user.email}
+            .form-group
+              %label{:for => "userNewPassword"}Change Password
+              %input.form-control#userNewPassword{:type => "password",  :name => 'new_password', :placeholder=> "Enter New Password"}
+              %input.form-control#userNewPasswordConfirm{:type => "password",  :name => 'new_password_confirm', :placeholder=> "Confirm New Password"}
+            .form-group
+              %label{:for => "userOldPassword"}Verify Old Password
+              %input.form-control#userOldPassword{:type => "password",  :name => 'password', :placeholder=> "Enter Old Password"}
+            %button.btn-lg.btn-success{:type => "submit"}Submit Changes

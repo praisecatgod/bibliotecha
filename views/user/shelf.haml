@@ -1,0 +1,79 @@
+.container#pale-background
+  .row
+    %h1 My Books
+  .row
+    .panel.panel-default
+      .panel-heading
+        %h3 Current Rentals
+      .panel-body
+        - @rentals.each_slice(4).to_a.each do |row|
+          .row
+            - row.each do |r|
+              .col-md-3
+                .book{:id=>r.book.id}
+                  %img.book-cover{:src=>"/covers/"+r.book.isbn.to_s+"image.jpg"}
+                    %h4= r.book.title
+                    - r.book.book_authors.each do |a|
+                      %h5= a.author.author_name
+                    %h4
+                      - if Time.new - r.created_at > 86400.0
+                        = "Expired!"
+                      - else
+                        = ((r.created_at+86400.0 - Time.now)/3600.0).ceil.to_s+" Hours Left"
+                .btn-group
+                  %button.btn.btn-success.downloadBook{:type => "button", :onclick => "downloadBook("+r.book.isbn.to_s+")"} Download
+                  %button.btn.btn-danger.returnBook{:type => "button", :onclick => "returnBook("+r.id.to_s+")"} Return
+  .row
+    .panel.panel-default
+      .panel-heading
+        %h3 Rental History
+      .panel-body
+        - @history.each_slice(4).to_a.each do |row|
+          .row
+            - row.each do |r|
+              .col-md-3.book{:id=>r.book.id}
+                %img.book-cover{:src=>"/covers/"+r.book.isbn.to_s+"image.jpg"}
+                  %h4= r.book.title
+                  - r.book.book_authors.each do |a|
+                    %h5= a.author.author_name
+                  %h6
+                    = "Rented: "
+                    = r.created_at.strftime("%d-%m-%Y")
+                  %h6
+                    = "Returned: "
+                    = r.updated_at.strftime("%d-%m-%Y")
+
+#bookModal.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{:type => "button", "data-dismiss" => "modal"}
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+      .modal-body
+        .row
+          .col-md-6
+            .row
+              .col-md-12
+                .div#bookCover
+          .col-md-6
+            .row
+              .col-md-12
+                %h2#bookTitle
+            .row
+              .col-md-12
+                %h3#bookAuthors
+            .row
+              .col-md-12
+                %p#bookSummary
+
+      .modal-footer
+        - if @user
+          %form.form-inline{:action => "/rent", :method => "post"}
+            .form-group
+              .input-group
+                %input#rentBookID{:type => "hidden", :name => "book_id", :value => "-1"}
+              %button.btn.btn-default#rentButton{:type => "submit"} Rent
+              %h4#rentWarning This Book Is Currently Being Rented!
+
+
+%script(src="/js/shelf.js")

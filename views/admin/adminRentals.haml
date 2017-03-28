@@ -1,0 +1,59 @@
+.container#pale-background
+  .row
+    .col-md-12
+      %h1 Rentals
+  .row
+    %h2 Active Rentals
+    %table#activeRentals
+      %thead
+        %tr
+          %th Checked Out
+          %th Library Card
+          %th Title
+          %th 
+      %tbody
+        - @active_rentals.each do |a|
+          %tr{:id => a.id}
+            %td= a.created_at
+            %td= a.user.library_card
+            %td= a.book.title
+            %td
+              .btn-group
+                %button.btn.btn-danger{:type => "button", :onclick => "returnBook("+a.id.to_s+")"} Return Book
+  .row
+    %h2 Expired Rentals
+    %table#expiredRentals
+      %thead
+        %tr
+          %th Checked Out
+          %th Library Card
+          %th Title
+          %th 
+      %tbody
+        - @expired_rentals.each do |a|
+          %tr{:id => a.id}
+            %td= a.created_at
+            %td= a.user.library_card
+            %td= a.book.title
+            %td
+              .btn-group
+                %button.btn.btn-danger{:type => "button",:onclick => "returnBook("+a.id.to_s+")"} Return Book
+  .row
+    %h2 Rental History
+    %table#rentalHistory
+      %thead
+        %tr
+          %th Checked Out
+          %th Returned
+          %th Library Card
+          %th Title
+      %tbody
+        - @old_rentals.each do |a|
+          %tr{:id => a.id}
+            %td= a.created_at
+            %td= a.updated_at
+            %td= a.user.library_card
+            %td= a.book.title
+            
+
+%script(src="/js/rentals.js")

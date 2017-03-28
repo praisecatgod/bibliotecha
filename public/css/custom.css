@@ -1,0 +1,56 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  background: #290c45;
+  padding: 0 50px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+}
+
+.footer .container
+{background-color: #f5f5f5;
+}
+
+#pale-background {
+  background-color: #eaeaea;
+}
+
+
+.container {
+  width: auto;
+  padding: 25px 50px;
+  background: #463e4c;
+}
+.container .text-muted {
+  margin: 20px 0;
+}
+
+.errorMessage{
+  color: #f00
+
+}
+
+.book-cover{
+  max-width: 75%;
+  height: auto;
+}
+
+ .static {
+   text-align: center
+ }
+ img.resize{
+    width:200px; /* you can use % */
+    height: auto;
+}

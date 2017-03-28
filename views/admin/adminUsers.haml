@@ -1,0 +1,120 @@
+.container#pale-background
+  .row
+    %h1 Edit Users  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addUserModal">+ User</button>
+  .row
+    %table#userTable
+      %thead
+        %tr
+          %th Library Card
+          %th Email Address
+          %th Current Downloads
+          %th Total Downloads
+          %th Admin
+          %th
+      %tbody
+        - @users.each do |u|
+          %tr{:id => u.id}
+            %td= u.library_card
+            %td= u.email
+            %td= u.rentals.where(is_active: true).count
+            %td= u.rentals.count
+            %td= u.is_admin
+            %td
+              .btn-group
+                %button.btn.btn-primary{:type => "button", "data-toggle" => "modal", "data-target" => "#userStatsModal", :id => u.id, :onclick => "statsUserModal("+u.id.to_s+")"} Stats
+                %button.btn.btn-warning{:type => "button", "data-toggle" => "modal", "data-target" => "#editUserModal", :onclick => "editUserModal("+u.id.to_s+",'"+u.email.to_s+"','"+u.library_card.to_s+"')"} Edit
+                %button.btn.btn-danger{:type => "button", "data-toggle" => "modal", "data-target" => "#deleteUserModal", :onclick => "deleteUserModal("+u.id.to_s+")"} Delete
+
+
+
+  #addUserModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Add A User
+        .modal-body
+          .row
+            .col-md-12
+              %form.form-inline{:action => "/admin/users", :method => "post"}
+                .form-group
+                  .input-group
+                    %input.form-control#addLibraryCardNum{:type => 'text', :placeholder => 'Library Card Number', :name => 'library_card'}
+                    %input.form-control#addEmailAddress{:type => 'text', :placeholder => 'Email Address', :name => 'email'}
+                    %input.form-control#addPassword{:type => 'password', :placeholder => 'Password', :name => 'password'}
+                    %input.form-control#addPasswordConfirm{:type => 'password', :placeholder => 'Confirm Password', :name => 'password_confirm'}
+                    .checkbox
+                      %label
+                        %input{:type => 'checkbox', :name => 'is_admin'} Admin Account
+                  .modal-footer
+                    %button.btn.btn-default#addButton Add User
+
+
+  #editUserModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Edit A User
+        .modal-body
+          .form-group
+            .row
+              .col-md-12
+                %form.form-inline{:action => "/admin/users", :method => "post"}
+                  .form-group
+                    .input-group
+                      %input{:type => "hidden", :name => "_method", :value => "put"}
+                      %input#editUserID{:type => "hidden", :name => "user_id", :value => "-1"}
+                      %input.form-control#editLibraryCardNum{:type => 'text', :placeholder => 'Library Card Number', :name => 'library_card'}
+                      %input.form-control#editEmailAddress{:type => 'text', :placeholder => 'Email Address', :name => 'email'}
+                      .checkbox
+                        %label
+                          %input#passwordToggle{:type => 'checkbox', :onClick => 'togglePasswordEdit()', :name => 'change_password'} Change Password?
+                      #editPasswordFields
+                        %input.form-control#editPassword{:type => 'password', :placeholder => 'Password', :name => 'password'}
+                        %input.form-control#editPasswordConfirm{:type => 'password', :placeholder => 'Confirm Password', :name => 'password_confirm'}
+                      .checkbox
+                        %label
+                          %input{:type => 'checkbox', :name => 'is_admin'} Admin Account
+                    %button.btn.btn-default{:type => "submit"} Edit
+
+  #deleteUserModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Delete A User
+        .modal-body
+          .form-group
+            .row
+              .col-md-12
+                %h2 This is VERY permenent and CAN NOT be reversed.
+                %h2 Are you sure you want to perform this action?
+                %form.form-inline{:action => "/admin/users", :method => "post"}
+                  .form-group
+                    .input-group
+                      %input{:type => "hidden", :name => "_method", :value => "delete"}
+                      %input#deleteUserID{:type => "hidden", :name => "user_id", :value => "-1"}
+                    %button.btn.btn-danger#deleteButton DELETE THIS USER
+
+
+  #userStatsModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 User Stats
+        .modal-body
+          .row
+            .col-md-6
+              %h5 Currently Renting
+              %ul#activeList
+            .col-md-6
+              %h5 Rental History
+              %ul#historyList
+
+%script(src="/js/users.js")

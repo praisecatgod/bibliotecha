@@ -1,0 +1,78 @@
+.container#pale-background
+  .row
+    .col-md-12
+      %h1 Edit Authors  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAuthorModal">+ Author</button>
+  .row
+    .col-md-12
+      %table#authorTable
+        %thead
+          %tr
+            %th Author
+            %th Number of Books
+            %th 
+        %tbody
+          - @authors.each do |a|
+            %tr{:id => a.id}
+              %td= a.author_name
+              %td= a.book_authors.count
+              %td
+                .btn-group
+                  %button.btn.btn-warning{:type => "button", "data-toggle" => "modal", "data-target" => "#editAuthorModal", :onclick => "editAuthorModal("+a.id.to_s+", '"+a.author_name.to_s+"')"} Edit
+                  %button.btn.btn-danger{:type => "button", "data-toggle" => "modal", "data-target" => "#deleteAuthorModal", :onclick => "deleteAuthorModal("+a.id.to_s+")"} Delete
+
+
+  #addAuthorModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Add An Author
+        .modal-body
+          .form-group
+            .row
+              .col-md-12
+                %form.form-inline{:action => "/admin/authors", :method => "post"}
+                  .form-group
+                    .input-group
+                      %input.form-control{:type => 'text', :placeholder => 'Author Name', :name=>'author_name'}
+                      %button.btn.btn-primary{:type => "submit"} Add Author
+
+  #editAuthorModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Edit An Author
+        .modal-body
+          .row
+            .col-md-12
+              %form.form-inline{:action => "/admin/authors", :method => "post"}
+                .form-group
+                  .input-group
+                    %input{:type => "hidden", :name => "_method", :value => "put"}
+                    %input#editAuthorID{:type => "hidden", :name => "author_id", :value => "-1"}
+                    %input.form-control#editAuthorName{:type => 'text', :placeholder => 'Author Name', :name=>'author_name'}
+                  %button.btn.btn-primary{:type => "submit"} Edit Author
+
+  #deleteAuthorModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Delete An Author
+        .modal-body
+          .row
+            .col-md-12
+              %h2 This is VERY permenent and CAN NOT be reversed.
+              %h2 Are you sure you want to perform this action?
+              %form.form-inline{:action => "/admin/authors", :method => "post"}
+                .form-group
+                  .input-group
+                    %input{:type => "hidden", :name => "_method", :value => "delete"}
+                    %input#deleteAuthorID{:type => "hidden", :name => "author_id", :value => "-1"}
+                  %button.btn.btn-danger{:type => "submit"} DELETE AUTHOR FOREVER
+
+%script(src="/js/author.js")

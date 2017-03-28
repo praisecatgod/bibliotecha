@@ -1,0 +1,51 @@
+.container.static#pale-background
+  .row
+    .col-md-3
+    .col-md-6
+      %h2 About This Site
+    .col-md-3
+  .row
+    .col-md-3
+    .col-md-6
+      %h3 Bibliotecha is an online library, that provides quality eBooks for your renting pleasure.
+      %p 
+        %form{:action => "https://www.paypal.com/cgi-bin/webscr", :method => "post", :target => "_top"}
+          %input{:name => "cmd", :type => "hidden", :value => "_s-xclick"}
+          %input{:name => "encrypted", :type => "hidden", :value => "-----BEGIN PKCS7-----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-----END PKCS7-----\n"}
+          %input{:alt => "PayPal - The safer, easier way to pay online!", :border => "0", :name => "submit", :src => "https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif", :type => "image"}
+            %img{:alt => "", :border => "0", :height => "1", :src => "https://www.paypalobjects.com/en_US/i/scr/pixel.gif", :width => "1"}
+        %p
+          %a{:href=>"http://ctt.ec/s5zeQ"} Tweet This Site
+    .col-md-3
+  .row
+    .col-md-6
+      .row
+        .col-md-12
+          %h2 Kevin Hock
+      .row
+        .col-md-12
+          %img.img-circle.resize{:src=>"/img/kevin.jpeg", :height=>"200", :width=>"200"}
+      .row
+        .col-md-12
+          %h5
+            %a{:href=>"https://github.com/kevinhock"} GitHub
+      .row
+        .col-md-12
+          %p Kevin is a Stony Brook University student, and probably one of the few devs who can call themselves a legit hacker. He's also probably one of the few people in the world to give into Sublime Text 2's desperate pleas for you to buy a license. Other worthy achievements include managing automated data retrieval for this site, and being a general security and back-end guru.
+
+    .col-md-6
+      .row
+        .col-md-12
+          %h2 Yves DeSousa
+      .row
+        .col-md-12
+          %img.img-circle.resize{:src=>"/img/yves.jpg", :height=>"200", :width=>"200"}
+      .row
+        .col-md-12
+          %h5
+            %a{:href=>"https://github.com/yvds"} GitHub
+
+        .row
+          .col-md-12
+            %p Yves is student at Stony Brook University, full-stack web developer, and prophet of the divine feline CAT GOD. They have achieved many great honors, including surviving TA'ing, making their current employer's app's loading icons obsolete and unneeded, and being featured in <a href="http://www.entrepreneur.com/article/237785">Entrepreneur.com</a>. (They were the student "rocking a cat suit".)
+            %p #praisecatgod

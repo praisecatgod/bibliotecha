@@ -1,0 +1,131 @@
+!!!
+%html{:lang => "en"}
+  %head
+    /[if lt IE 9]
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+
+    %link{:type => "text/css", :rel => "stylesheet", :href => "/css/lib/bootstrap.min.css"}
+    %script(src="/js/lib/jquery.min.js")
+
+    %script(src="/js/lib/jquery-ui.min.js")
+    %link{:type => "text/css", :rel => "stylesheet", :href => "/css/lib/jquery-ui.min.css"}
+    %script(src="/js/lib/bootstrap.min.js")
+    %link{:type => "text/css", :rel => "stylesheet", :href => "/css/lib/jquery.dataTables.min.css"}
+    %script(src="/js/lib/jquery.dataTables.min.js")
+
+    %link{:type => "text/css", :rel => "stylesheet", :href => "/css/lib/select2.css"}
+    %script(src="/js/select2.min.js")
+
+
+    %link{:type => "text/css", :rel => "stylesheet", :href => "/css/custom.css"}
+
+    %meta{:charset => "utf-8"}/
+    %title Bibliotecha
+    %meta{:content => "Bibliotecha Online Library eBook Rentals", :name => "description"}/
+    %meta{:content => "Yves DeSousa", :name => "author"}/
+    = include_gon
+  %body
+
+  %nav.navbar.navbar-default{:role => 'navigation'}
+    .container-fluid
+      .navbar-header
+        %a.navbar-brand{:href => '/'} Bibliotecha
+      %ul.nav.navbar-nav
+        %li
+          %a{:href => '/browse'}Browse Books
+        - if @user
+          %li
+            %a{:href => '/shelf'}My Shelf
+        - if @user && @user.is_admin?
+          %li.dropdown
+            %a.dropdown-toggle{:href => '/admin', "data-toggle" =>'dropdown'}Admin Panel <span class="caret"></span>
+            %ul.dropdown-menu{:role => 'menu'}
+              %li
+                %a{:href => '/admin/rentals'}Rentals
+              %li
+                %a{:href => '/admin/users'}Users
+              %li
+                %a{:href => '/admin/books'}Books
+              %li
+                %a{:href => '/admin/authors'}Authors
+              %li
+                %a{:href => '/admin/genres'}Genres
+      %ul.nav.navbar-nav.navbar-right
+        - if @user
+          %li.dropdown
+            %a.dropdown-toggle{:href => '#', "data-toggle" =>'dropdown'}
+              =@user.email
+              <span class="caret"></span>
+            %ul.dropdown-menu{:role => 'menu'}
+              %li
+                %a{:href => '/settings'}Account Settings
+              %li
+                %a{:href => '/signout'}Log Out
+        - else
+          %li
+            %button.btn.btn-link.navbar-btn{:type => "button", "data-toggle" => "modal", "data-target" => "#signUpModal"}Sign Up
+          %li
+            %button.btn.btn-link.navbar-btn{:type => "button", "data-toggle" => "modal", "data-target" => "#logInModal"}Log In
+  =yield
+
+  .footer
+    .container
+      %p.muted Made By Yves DeSousa && Kevin Hock 2014
+      %ul.nav.navbar-nav
+        %li
+          %a{:href => '/about'}About
+        %li
+          %a{:href => '/help'}Help
+
+
+  #signUpModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Welcome to Bibliotecha!
+        .modal-body
+          .row
+            .col-md-12
+              %h4.errorMessage#signUpError
+          .form-group
+            .row
+              .col-md-12
+                .form-group#signUpCard
+                  %input.form-control#libraryCardNum{:type => 'text', :placeholder => 'Library Card Number'}
+            .row
+              .col-md-12
+                .form-group#signUpEmail
+                  %input.form-control#emailAddress{:type => 'text', :placeholder => 'Email Address'}
+            .row
+              .col-md-12
+                .form-group#signUpPassword1
+                  %input.form-control#signUpPassword{:type => 'password', :placeholder => 'Password'}
+            .row
+              .col-md-12
+                .form-group#signUpPassword2
+                  %input.form-control#signUpPasswordConfirm{:type => 'password', :placeholder => 'Confirm Password'}
+          .modal-footer
+            %button.btn.btn-default#signUpButton Sign Up
+
+  #logInModal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{:type => "button", "data-dismiss" => "modal"}
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          %h4 Welcome Back!
+        .modal-body
+          .form-group#logInForm
+            .row
+              .col-md-12
+                %input.form-control#logInCredentials{:type => 'text', :placeholder => 'Library Card Number/Email Address'}
+            .row
+              .col-md-12
+                %input.form-control#logInPassword{:type => 'password', :placeholder => 'Password'}
+          .modal-footer
+            %button.btn.btn-default#logInButton Log In
+
+
+%script(src="/js/layout.js")
